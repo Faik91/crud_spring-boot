@@ -1,0 +1,127 @@
+<html   xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Users Page</title>
+
+    <style type="text/css">
+        .tg {
+            border-collapse: collapse;
+            border-spacing: 0;
+            border-color: #ccc;
+        }
+
+        .tg td {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            padding: 10px 5px;
+            border-style: solid;
+            border-width: 1px;
+            overflow: hidden;
+            word-break: normal;
+            border-color: #ccc;
+            color: #333;
+            background-color: #fff;
+        }
+
+        .tg th {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            font-weight: normal;
+            padding: 10px 5px;
+            border-style: solid;
+            border-width: 1px;
+            overflow: hidden;
+            word-break: normal;
+            border-color: #ccc;
+            color: #333;
+            background-color: #f0f0f0;
+        }
+
+    </style>
+</head>
+<body>
+
+<br/>
+<br/>
+
+<h1>User List</h1>
+
+<div th:if="${!listUsers.isEmpty()}">
+
+<table class="tg">
+    <div>
+        <tr>
+            <th th:width="80">ID</th>
+            <th th:width="120">Name</th>
+            <th th:width="120">Password</th>
+            <th th:width="60">Edit</th>
+            <th th:width="60">Delete</th>
+        </tr>
+
+
+            <th:block th:each="us : ${listUsers}">
+            <tr>
+                <td th:text=" ${us.id}"></td>
+                <td><a th:href="@{'/admin/userData/' + ${us.id}}"> <div th:text="${us.name}"></div></a></td>
+                <td th:text="${us.password}"></td>
+                <td><a th:href="@{'/admin/editUser/' + ${us.id}}">Edit</a></td>
+                <td><a th:href="@{'/admin/remove/' + ${us.id}}">Delete</a></td>
+            </tr>
+        </th:block>
+
+    </div>
+</table>
+</div>
+
+<h2>Add a User</h2>
+
+<form th:action="@{'/admin/users/add'}" th:object="${user}" method="post">
+
+    <table>
+        <div th:if="${user.name != null}">
+            <tr>
+                <td>
+                    <p>Id: <label>
+                        <input type="text" th:readonly="true" th:disabled="true"  th:field="*{id}" />
+                    </label></p>
+                </td>
+            </tr>
+        </div>
+
+        <tr>
+            <td>
+                <p>Name: <label>
+                    <input type="text" th:field="*{name}" />
+                </label></p>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <p>Password: <label>
+                    <input type="text" th:field="*{password}" />
+                </label></p>
+            </td>
+        </tr>
+
+
+        <tr>
+            <td>
+                <div th:if="${user.name != null}">
+                    <p><input type="submit" value="Edit user"></p>
+                </div>
+                <div th:if="${user.name == null}">
+                    <p><input type="submit" value="Add user"></p>
+                </div>
+            </td>
+        </tr>
+
+    </table>
+
+
+</form>
+
+<form th:action="@{/logout}" method="POST">
+    <input type="submit" value="Logout"/>
+</form>
+</body>
+</html>
